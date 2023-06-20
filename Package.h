@@ -1,28 +1,24 @@
-#ifndef PACKAGE_H
-#define PACKAGE_H
-
+#pragma once
+#include <iostream>
 #include <string>
-
-
-class Package
-{
-	std::string packageName;
-	float packageWeight;
+#include "Drone.h"
+#include "AutoDeliver.h"
+using namespace std;
+class Package {
+private:
+    std::string name;
+    std::string dropOffPoint;
+    std::string dropOffDeadline;
+    bool assignedToDrone;
 
 public:
-	void setName(std::string);
-	void getName(std::string);
-	void setWeight(float);
-	void getWeight(float);
-
-
-
-
-
-
-
-
-
+    Package(const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline);
+    const std::string& getName() const;
+    const std::string& getDropOffPoint() const;
+    const std::string& getDropOffDeadline() const;
+    bool isAssignedToDrone() const;
+    void assignToDrone();
+    void unassignFromDrone();
 };
 
 #endif
