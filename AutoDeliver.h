@@ -1,44 +1,34 @@
-#ifndef AUTODELIVER_H
-#define AUTODELIVER_H
-
-#include <vector>
-#include <string>
-
+#pragma once
 #include "Drone.h"
 #include "Package.h"
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <algorithm>
 
-class AutoDeliver
-{	// attribute declaration
-	// vector usage for dynamic size array. We can't determine how many instances of objects are being created
-	std::vector <Drone> drones;
-	std::vector <Package> packages;
+using namespace std;
+class Drone;
+class Package;
+class AutoDeliver {
+private:
+    std::vector<Drone> drones;
+    std::vector<Package> packages;
 
 public:
-	// method declaration
-	// add/remove/edit methods that can be inherited for both drone and package
-	void addObject();
-	void removeObject();
-	void editObject();
-
-	void matchingPlan();
-	void saveMatchingPlan();
-	void displayMatchingPlan();
-	void displayUnassignedDrone();
-	void displayUnassignedPackage();
-
-	// This is for the location destination and time for drone to charge. Is this supposed to be here? Or in individual? But if same location can -
-	// - just inherit right?
-	void timeDue(int);
-	void locationDue(std::string);
-
-
-
-
-
-
-
-
-
+    void loadDroneData(const std::string& droneDataFilePath);
+    void loadPackageData(const std::string& packageDataFilePath);
+    void generateMatchingPlan();
+    void displayMatchingPlan() const;
+    void saveMatchingPlanToFile(const std::string& filePath) const;
+    void addDrone(const std::string& name, const std::string& destination, const std::string& rechargeDeadline);
+    void addPackage(const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline);
+    void editDrone(const std::string& name, const std::string& destination, const std::string& rechargeDeadline);
+    void editPackage(const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline);
+    void deleteDrone(const std::string& name);
+    void deletePackage(const std::string& name);
 };
+
 
 #endif
