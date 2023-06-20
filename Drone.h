@@ -1,25 +1,22 @@
-#ifndef DRONE_H
-#define DRONE_H
-
+#pragma once
+#include <iostream>
 #include <string>
-
-
-class Drone
-{
-	std::string droneName;
-	int batteryLevel, batteryCharge;
+#include "Package.h"
+#include "AutoDeliver.h"
+using namespace std;
+class Drone {
+private:
+    std::string name;
+    std::string destination;
+    std::string rechargeDeadline;
+    bool hasPackage;
 
 public:
-	void setName(std::string);
-	void getName(std::string);
-	void setBattery(int);
-	void getBattery(int);
-
-
-
-
-
-
+    Drone(const std::string& name, const std::string& destination, const std::string& rechargeDeadline);
+    const std::string& getName() const;
+    const std::string& getDestination() const;
+    const std::string& getRechargeDeadline() const;
+    bool hasPackageAssigned() const;
+    void assignPackage();
+    void unassignPackage();
 };
-
-#endif
