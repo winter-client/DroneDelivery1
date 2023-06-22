@@ -30,5 +30,3 @@ public:
     void deletePackage(const std::string& name);
 };
 
-
-#endif
