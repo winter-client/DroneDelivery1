@@ -6,8 +6,11 @@ void AutoDeliver::loadDroneData(const std::string& droneDataFilePath) {
     std::ifstream file(droneDataFilePath);
     if (file.is_open()) {
         std::string line;
-        // Skip the header line
-        getline(file, line);
+        // Check if the file is empty
+        if (file.peek() != std::ifstream::traits_type::eof()) {
+            // Skip the header line
+            getline(file, line);
+        }
         while (getline(file, line)) {
             std::stringstream ss(line);
             std::string name, destination, rechargeDeadline;
@@ -19,7 +22,7 @@ void AutoDeliver::loadDroneData(const std::string& droneDataFilePath) {
         file.close();
     }
     else {
-        std::cout << "Error opening drone data file." << std::endl;
+        std::cerr << "Error opening drone data file." << std::endl;
     }
 }
 
@@ -27,8 +30,11 @@ void AutoDeliver::loadPackageData(const std::string& packageDataFilePath) {
     std::ifstream file(packageDataFilePath);
     if (file.is_open()) {
         std::string line;
-        // Skip the header line
-        getline(file, line);
+        // Check if the file is empty
+        if (file.peek() != std::ifstream::traits_type::eof()) {
+            // Skip the header line
+            getline(file, line);
+        }
         while (getline(file, line)) {
             std::stringstream ss(line);
             std::string name, dropOffPoint, dropOffDeadline;
@@ -40,9 +46,10 @@ void AutoDeliver::loadPackageData(const std::string& packageDataFilePath) {
         file.close();
     }
     else {
-        std::cout << "Error opening package data file." << std::endl;
+        std::cerr << "Error opening package data file." << std::endl;
     }
 }
+
 
 void AutoDeliver::generateMatchingPlan() {
     // Sort drones and packages based on drop-off points
@@ -53,11 +60,17 @@ void AutoDeliver::generateMatchingPlan() {
         return a.getDropOffPoint() < b.getDropOffPoint();
         });
 
-    // Assign packages to drones with the same drop-off points
+    // Reset package assignments for drones
+    for (auto& drone : drones) {
+        drone.unassignPackage();
+    }
+
+    // Assign packages to drones with the same drop-off points and within the recharge deadline
     for (auto& drone : drones) {
         if (!drone.hasPackageAssigned()) {
             for (auto& package : packages) {
-                if (!package.isAssignedToDrone() && drone.getDestination() == package.getDropOffPoint()) {
+                if (!package.isAssignedToDrone() && drone.getDestination() == package.getDropOffPoint() &&
+                    drone.getRechargeDeadline() >= package.getDropOffDeadline()) {
                     drone.assignPackage();
                     package.assignToDrone();
                     break;
@@ -74,6 +87,7 @@ void AutoDeliver::displayMatchingPlan() const {
     for (const Drone& drone : drones) {
         bool hasPackageAssigned = false;
         std::cout << "Drone " << drone.getName() << " (Destination: " << drone.getDestination() << ", Recharge Deadline: " << drone.getRechargeDeadline() << ") -> Packages: ";
+
         for (const Package& package : packages) {
             if (package.isAssignedToDrone() && package.getDropOffPoint() == drone.getDestination()) {
                 if (!hasPackageAssigned) {
@@ -96,11 +110,16 @@ void AutoDeliver::displayMatchingPlan() const {
     }
 
     // Display unassigned packages
-    bool hasUnassignedPackages = true;
+    bool hasUnassignedPackages = false;
+
     for (const Package& package : packages) {
         if (!package.isAssignedToDrone()) {
-            std::cout << "Package " << package.getName() << " (Drop-off Point: " << package.getDropOffPoint() << ", Drop-off Deadline: " << package.getDropOffDeadline() << ") is not assigned to any drone." << std::endl;
-            hasUnassignedPackages = false;
+            if (!hasUnassignedPackages) {
+                hasUnassignedPackages = true;
+                std::cout << "Unassigned Packages:" << std::endl;
+            }
+
+            std::cout << "Package " << package.getName() << " (Drop-off Point: " << package.getDropOffPoint() << ", Drop-off Deadline: " << package.getDropOffDeadline() << ")" << std::endl;
         }
     }
 
@@ -109,35 +128,128 @@ void AutoDeliver::displayMatchingPlan() const {
     }
 }
 
+
 void AutoDeliver::saveMatchingPlanToFile(const std::string& filePath) const {
     std::ofstream file(filePath);
     if (file.is_open()) {
+        file << "Matching Plan:" << std::endl;
+        bool hasMatchingPlan = false;
+
         for (const Drone& drone : drones) {
             if (drone.hasPackageAssigned()) {
-                file << "Drone " << drone.getName() << " (Destination: " << drone.getDestination() << ", Recharge Deadline: " << drone.getRechargeDeadline() << ") -> Package ";
+                file << drone.getName() << "," << drone.getDestination() << "," << drone.getRechargeDeadline() << ",";
+                bool hasPackageAssigned = false;
                 for (const Package& package : packages) {
                     if (package.isAssignedToDrone() && package.getDropOffPoint() == drone.getDestination()) {
-                        file << package.getName();
-                        break;
+                        if (!hasPackageAssigned) {
+                            file << package.getName();
+                            hasPackageAssigned = true;
+                        }
+                        else {
+                            file << ";" << package.getName();
+                        }
                     }
                 }
                 file << std::endl;
+                hasMatchingPlan = true;
             }
         }
+
+        if (!hasMatchingPlan) {
+            file << "No matching plan found." << std::endl;
+        }
+
+        // Display unassigned packages
+        bool hasUnassignedPackages = false;
+
+        for (const Package& package : packages) {
+            if (!package.isAssignedToDrone()) {
+                if (!hasUnassignedPackages) {
+                    hasUnassignedPackages = true;
+                    file << "Unassigned Packages:" << std::endl;
+                }
+
+                file << package.getName() << "," << package.getDropOffPoint() << "," << package.getDropOffDeadline() << std::endl;
+            }
+        }
+
+        if (!hasMatchingPlan && !hasUnassignedPackages) {
+            file << "No matching plan found. No unassigned packages." << std::endl;
+        }
+
         file.close();
+        std::cout << "Matching plan saved successfully." << std::endl;
     }
     else {
-        std::cout << "Error opening the matching plan file." << std::endl;
+        std::cerr << "Error opening the matching plan file." << std::endl;
     }
 }
 
-void AutoDeliver::addDrone(const std::string& name, const std::string& destination, const std::string& rechargeDeadline) {
+void AutoDeliver::addDrone(const std::string& filePath, const std::string& name, const std::string& destination, const std::string& rechargeDeadline) {
     drones.push_back(Drone(name, destination, rechargeDeadline));
+
+    std::ofstream file(filePath, std::ios::app); // Open file in append mode
+    if (file.is_open()) {
+        // Check if the file is empty
+        std::ifstream checkFile(filePath);
+        bool isEmpty = checkFile.peek() == std::ifstream::traits_type::eof();
+        checkFile.close();
+
+        if (isEmpty) {
+            file << "Name,Destination,Recharge Deadline" << std::endl; // Write the header line
+        }
+
+        file << name << "," << destination << "," << rechargeDeadline << std::endl;
+        file.close();
+
+        if (isEmpty) {
+            std::cout << "Drone added successfully." << std::endl;
+        }
+        else {
+            std::cout << "Drone data appended successfully." << std::endl;
+        }
+
+        generateMatchingPlan();
+    }
+    else {
+        std::cerr << "Error opening the file." << std::endl;
+    }
 }
 
-void AutoDeliver::addPackage(const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline) {
+void AutoDeliver::addPackage(const std::string& filePath, const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline) {
     packages.push_back(Package(name, dropOffPoint, dropOffDeadline));
+
+    std::ofstream file(filePath, std::ios::app); // Open file in append mode
+    if (file.is_open()) {
+        // Check if the file is empty
+        std::ifstream checkFile(filePath);
+        bool isEmpty = checkFile.peek() == std::ifstream::traits_type::eof();
+        checkFile.close();
+
+        if (isEmpty) {
+            file << "Name,Drop-off Point,Drop-off Deadline" << std::endl; // Write the header line
+        }
+
+        file << name << "," << dropOffPoint << "," << dropOffDeadline << std::endl;
+        file.close();
+
+        if (isEmpty) {
+            std::cout << "Package added successfully." << std::endl;
+        }
+        else {
+            std::cout << "Package data appended successfully." << std::endl;
+        }
+
+        generateMatchingPlan();
+    }
+    else {
+        std::cerr << "Error opening the file." << std::endl;
+    }
 }
+
+
+
+
 
 void AutoDeliver::editDrone(const std::string& name, const std::string& destination, const std::string& rechargeDeadline) {
     for (auto& drone : drones) {
@@ -157,14 +269,45 @@ void AutoDeliver::editPackage(const std::string& name, const std::string& dropOf
     }
 }
 
-void AutoDeliver::deleteDrone(const std::string& name) {
+void AutoDeliver::deleteDrone(const std::string& filePath, const std::string& name) {
     drones.erase(std::remove_if(drones.begin(), drones.end(), [name](const Drone& drone) {
         return drone.getName() == name;
         }), drones.end());
+
+    // Update the file contents
+    std::ofstream file(filePath);
+    if (file.is_open()) {
+        file << "Name,Destination,Recharge Deadline" << std::endl; // Write the header line
+        for (const Drone& drone : drones) {
+            file << drone.getName() << "," << drone.getDestination() << "," << drone.getRechargeDeadline() << std::endl;
+        }
+        file.close();
+        std::cout << "Drone deleted successfully." << std::endl;
+        generateMatchingPlan();
+    }
+    else {
+        std::cerr << "Error opening the file." << std::endl;
+    }
 }
 
-void AutoDeliver::deletePackage(const std::string& name) {
+void AutoDeliver::deletePackage(const std::string& filePath, const std::string& name) {
     packages.erase(std::remove_if(packages.begin(), packages.end(), [name](const Package& package) {
         return package.getName() == name;
         }), packages.end());
+
+    // Update the file contents
+    std::ofstream file(filePath);
+    if (file.is_open()) {
+        file << "Name,Drop-off Point,Drop-off Deadline" << std::endl; // Write the header line
+        for (const Package& package : packages) {
+            file << package.getName() << "," << package.getDropOffPoint() << "," << package.getDropOffDeadline() << std::endl;
+        }
+        file.close();
+        std::cout << "Package deleted successfully." << std::endl;
+        generateMatchingPlan();
+    }
+    else {
+        std::cerr << "Error opening the file." << std::endl;
+    }
 }
+

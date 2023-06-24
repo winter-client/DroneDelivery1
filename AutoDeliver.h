@@ -1,4 +1,6 @@
-#pragma once
+#ifndef AUTODELIVER_H
+#define AUTODELIVER_H
+
 #include "Drone.h"
 #include "Package.h"
 #include <iostream>
@@ -9,8 +11,10 @@
 #include <algorithm>
 
 using namespace std;
+
 class Drone;
 class Package;
+
 class AutoDeliver {
 private:
     std::vector<Drone> drones;
@@ -22,12 +26,12 @@ public:
     void generateMatchingPlan();
     void displayMatchingPlan() const;
     void saveMatchingPlanToFile(const std::string& filePath) const;
-    void addDrone(const std::string& name, const std::string& destination, const std::string& rechargeDeadline);
-    void addPackage(const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline);
+    void addDrone(const std::string& filePath, const std::string& name, const std::string& destination, const std::string& rechargeDeadline);
+    void addPackage(const std::string& filePath, const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline);
     void editDrone(const std::string& name, const std::string& destination, const std::string& rechargeDeadline);
     void editPackage(const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline);
-    void deleteDrone(const std::string& name);
-    void deletePackage(const std::string& name);
+    void deleteDrone(const std::string& filePath, const std::string& name);
+    void deletePackage(const std::string& filePath, const std::string& name);
 };
 
 

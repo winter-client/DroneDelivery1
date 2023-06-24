@@ -39,4 +39,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="drone.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="package.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="plan.txt" />
+  </ItemGroup>
 </Project>

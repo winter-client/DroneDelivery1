@@ -1,0 +1,3 @@
+Name,Destination,Recharge Deadline
+D1,StopA,0700
+D2,StopB,0900

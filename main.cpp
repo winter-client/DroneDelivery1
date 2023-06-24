@@ -43,6 +43,8 @@ int main() {
         cout << "4. Edit Package" << endl;
         cout << "5. Delete Drone" << endl;
         cout << "6. Delete Package" << endl;
+        //cout << "7. Save Matching Plan" << endl;
+        //cout << "8. Display Matching Plan" << endl;
         cout << "0. Exit" << endl;
         cout << "==================================" << endl;
         cout << "Enter your choice: ";
@@ -56,7 +58,7 @@ int main() {
             cin >> destination;
             cout << "Enter recharge deadline: ";
             cin >> rechargeDeadline;
-            autoDeliver.addDrone(name, destination, rechargeDeadline);
+            autoDeliver.addDrone(droneDataFilePath,name, destination, rechargeDeadline);
             break;
         case 2:
             cout << "Enter package name: ";
@@ -65,7 +67,7 @@ int main() {
             cin >> dropOffPoint;
             cout << "Enter drop-off deadline: ";
             cin >> dropOffDeadline;
-            autoDeliver.addPackage(name, dropOffPoint, dropOffDeadline);
+            autoDeliver.addPackage(packageDataFilePath,name, dropOffPoint, dropOffDeadline);
             break;
         case 3:
             cout << "Enter drone name to edit: ";
@@ -88,18 +90,18 @@ int main() {
         case 5:
             cout << "Enter drone name to delete: ";
             cin >> name;
-            autoDeliver.deleteDrone(name);
+            autoDeliver.deleteDrone(droneDataFilePath,name);
             break;
         case 6:
             cout << "Enter package name to delete: ";
             cin >> name;
-            autoDeliver.deletePackage(name);
+            autoDeliver.deletePackage(packageDataFilePath,name);
             break;
         case 0:
             cout << "Exiting..." << endl;
             return 0;
         default:
-            cout << "Invalid choice. Please try again." << endl;
+            cerr << "Invalid choice. Please try again." << endl;
         }
 
         // Regenerate and display the updated matching plan

@@ -1,9 +1,13 @@
-#pragma once
+#ifndef DRONE_H
+#define DRONE_H
+
 #include <iostream>
 #include <string>
 #include "Package.h"
 #include "AutoDeliver.h"
+
 using namespace std;
+
 class Drone {
 private:
     std::string name;
@@ -20,3 +24,5 @@ public:
     void assignPackage();
     void unassignPackage();
 };
+
+#endif

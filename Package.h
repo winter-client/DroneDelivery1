@@ -1,9 +1,13 @@
-#pragma once
+#ifndef Package_H
+#define Package_H
+
 #include <iostream>
 #include <string>
 #include "Drone.h"
 #include "AutoDeliver.h"
+
 using namespace std;
+
 class Package {
 private:
     std::string name;
