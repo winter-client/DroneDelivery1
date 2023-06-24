@@ -64,7 +64,7 @@ int main() {
                 cin >> destination;
                 cout << "Enter recharge deadline: ";
                 cin >> rechargeDeadline;
-                autoDeliver.addDrone(droneDataFilePath,name, destination, rechargeDeadline);
+                autoDeliver.addDrone(droneDataFilePath, name, destination, rechargeDeadline);
             }
             break;
         case 2:
@@ -80,36 +80,64 @@ int main() {
                 cin >> dropOffPoint;
                 cout << "Enter drop-off deadline: ";
                 cin >> dropOffDeadline;
-                autoDeliver.addPackage(packageDataFilePath,name, dropOffPoint, dropOffDeadline);
+                autoDeliver.addPackage(packageDataFilePath, name, dropOffPoint, dropOffDeadline);
             }
             break;
         case 3:
             cout << "Enter drone name to edit: ";
             cin >> name;
-            cout << "Enter new destination: ";
-            cin >> destination;
-            cout << "Enter new recharge deadline: ";
-            cin >> rechargeDeadline;
-            autoDeliver.editDrone(droneDataFilePath,name, destination, rechargeDeadline);
+
+            // Check if the drone exists in the matching plan
+            if (!autoDeliver.droneExists(name)) {
+                cout << "Drone with the specified name does not exist in the matching plan." << endl;
+            }
+            else {
+                cout << "Enter new destination: ";
+                cin >> destination;
+                cout << "Enter new recharge deadline: ";
+                cin >> rechargeDeadline;
+                autoDeliver.editDrone(droneDataFilePath,name, destination, rechargeDeadline);
+            }
             break;
         case 4:
             cout << "Enter package name to edit: ";
             cin >> name;
-            cout << "Enter new drop-off point: ";
-            cin >> dropOffPoint;
-            cout << "Enter new drop-off deadline: ";
-            cin >> dropOffDeadline;
-            autoDeliver.editPackage(packageDataFilePath,name, dropOffPoint, dropOffDeadline);
+
+            // Check if the package exists in the matching plan
+            if (!autoDeliver.packageExists(name)) {
+                cout << "Package with the specified name does not exist in the matching plan." << endl;
+            }
+            else {
+                cout << "Enter new drop-off point: ";
+                cin >> dropOffPoint;
+                cout << "Enter new drop-off deadline: ";
+                cin >> dropOffDeadline;
+                autoDeliver.editPackage(packageDataFilePath,name, dropOffPoint, dropOffDeadline);
+            }
             break;
         case 5:
             cout << "Enter drone name to delete: ";
             cin >> name;
-            autoDeliver.deleteDrone(droneDataFilePath,name);
+
+            // Check if the drone exists in the matching plan
+            if (!autoDeliver.droneExists(name)) {
+                cout << "Drone with the specified name does not exist in the matching plan." << endl;
+            }
+            else {
+                autoDeliver.deleteDrone(droneDataFilePath, name);
+            }
             break;
         case 6:
             cout << "Enter package name to delete: ";
             cin >> name;
-            autoDeliver.deletePackage(packageDataFilePath,name);
+
+            // Check if the package exists in the matching plan
+            if (!autoDeliver.packageExists(name)) {
+                cout << "Package with the specified name does not exist in the matching plan." << endl;
+            }
+            else {
+                autoDeliver.deletePackage(packageDataFilePath, name);
+            }
             break;
         case 0:
             cout << "Exiting..." << endl;
