@@ -90,7 +90,7 @@ int main() {
             cin >> destination;
             cout << "Enter new recharge deadline: ";
             cin >> rechargeDeadline;
-            autoDeliver.editDrone(name, destination, rechargeDeadline);
+            autoDeliver.editDrone(droneDataFilePath,name, destination, rechargeDeadline);
             break;
         case 4:
             cout << "Enter package name to edit: ";
@@ -99,7 +99,7 @@ int main() {
             cin >> dropOffPoint;
             cout << "Enter new drop-off deadline: ";
             cin >> dropOffDeadline;
-            autoDeliver.editPackage(name, dropOffPoint, dropOffDeadline);
+            autoDeliver.editPackage(packageDataFilePath,name, dropOffPoint, dropOffDeadline);
             break;
         case 5:
             cout << "Enter drone name to delete: ";

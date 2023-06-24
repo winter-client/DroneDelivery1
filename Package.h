@@ -6,8 +6,6 @@
 #include "Drone.h"
 #include "AutoDeliver.h"
 
-using namespace std;
-
 class Package {
 private:
     std::string name;

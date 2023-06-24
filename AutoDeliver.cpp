@@ -247,27 +247,52 @@ void AutoDeliver::addPackage(const std::string& filePath, const std::string& nam
     }
 }
 
-
-
-
-
-void AutoDeliver::editDrone(const std::string& name, const std::string& destination, const std::string& rechargeDeadline) {
+void AutoDeliver::editDrone(const std::string& filePath, const std::string& name, const std::string& destination, const std::string& rechargeDeadline) {
     for (auto& drone : drones) {
         if (drone.getName() == name) {
             drone = Drone(name, destination, rechargeDeadline);
             break;
         }
     }
+
+    std::ofstream file(filePath); // Open the file for writing, which truncates the existing data
+    if (file.is_open()) {
+        file << "Name,Destination,Recharge Deadline" << std::endl; // Write the header line
+        for (const auto& drone : drones) {
+            file << drone.getName() << "," << drone.getDestination() << "," << drone.getRechargeDeadline() << std::endl;
+        }
+        file.close();
+        std::cout << "Drone edited successfully." << std::endl;
+        generateMatchingPlan();
+    }
+    else {
+        std::cerr << "Error opening the file." << std::endl;
+    }
 }
 
-void AutoDeliver::editPackage(const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline) {
+void AutoDeliver::editPackage(const std::string& filePath, const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline) {
     for (auto& package : packages) {
         if (package.getName() == name) {
             package = Package(name, dropOffPoint, dropOffDeadline);
             break;
         }
     }
+
+    std::ofstream file(filePath); // Open the file for writing, which truncates the existing data
+    if (file.is_open()) {
+        file << "Name,Drop-off Point,Drop-off Deadline" << std::endl; // Write the header line
+        for (const auto& package : packages) {
+            file << package.getName() << "," << package.getDropOffPoint() << "," << package.getDropOffDeadline() << std::endl;
+        }
+        file.close();
+        std::cout << "Package edited successfully." << std::endl;
+        generateMatchingPlan();
+    }
+    else {
+        std::cerr << "Error opening the file." << std::endl;
+    }
 }
+
 
 void AutoDeliver::deleteDrone(const std::string& filePath, const std::string& name) {
     drones.erase(std::remove_if(drones.begin(), drones.end(), [name](const Drone& drone) {
