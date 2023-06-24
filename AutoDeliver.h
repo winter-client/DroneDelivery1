@@ -17,8 +17,8 @@ class Package;
 
 class AutoDeliver {
 private:
-    std::vector<Drone> drones;
-    std::vector<Package> packages;
+    vector<Drone> drones;
+    vector<Package> packages;
 
 public:
     void loadDroneData(const std::string& droneDataFilePath);
@@ -32,6 +32,8 @@ public:
     void editPackage(const std::string& name, const std::string& dropOffPoint, const std::string& dropOffDeadline);
     void deleteDrone(const std::string& filePath, const std::string& name);
     void deletePackage(const std::string& filePath, const std::string& name);
+    bool droneExists(const string& name) const;
+    bool packageExists(const std::string& name) const;
 };
 
 #endif
