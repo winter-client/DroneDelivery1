@@ -54,20 +54,34 @@ int main() {
         case 1:
             cout << "Enter drone name: ";
             cin >> name;
-            cout << "Enter destination: ";
-            cin >> destination;
-            cout << "Enter recharge deadline: ";
-            cin >> rechargeDeadline;
-            autoDeliver.addDrone(droneDataFilePath,name, destination, rechargeDeadline);
+
+            // Check if the drone already exists in the matching plan
+            if (autoDeliver.droneExists(name)) {
+                cout << "Drone with the same name already exists in the matching plan." << endl;
+            }
+            else {
+                cout << "Enter destination: ";
+                cin >> destination;
+                cout << "Enter recharge deadline: ";
+                cin >> rechargeDeadline;
+                autoDeliver.addDrone(droneDataFilePath,name, destination, rechargeDeadline);
+            }
             break;
         case 2:
             cout << "Enter package name: ";
             cin >> name;
-            cout << "Enter drop-off point: ";
-            cin >> dropOffPoint;
-            cout << "Enter drop-off deadline: ";
-            cin >> dropOffDeadline;
-            autoDeliver.addPackage(packageDataFilePath,name, dropOffPoint, dropOffDeadline);
+
+            // Check if the package already exists in the matching plan
+            if (autoDeliver.packageExists(name)) {
+                cout << "Package with the same name already exists in the matching plan." << endl;
+            }
+            else {
+                cout << "Enter drop-off point: ";
+                cin >> dropOffPoint;
+                cout << "Enter drop-off deadline: ";
+                cin >> dropOffDeadline;
+                autoDeliver.addPackage(packageDataFilePath,name, dropOffPoint, dropOffDeadline);
+            }
             break;
         case 3:
             cout << "Enter drone name to edit: ";

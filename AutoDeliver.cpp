@@ -311,3 +311,20 @@ void AutoDeliver::deletePackage(const std::string& filePath, const std::string& 
     }
 }
 
+bool AutoDeliver::packageExists(const std::string& name) const {
+    for (const auto& package : packages) {
+        if (package.getName() == name) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool AutoDeliver::droneExists(const std::string& name) const {
+    for (const auto& drone : drones) {
+        if (drone.getName() == name) {
+            return true;
+        }
+    }
+    return false;
+}
