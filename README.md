@@ -3,7 +3,7 @@ App files:
 - 1 main file
 - 3 header class files
 - 3 cpp implementation files
-- 3 data storage text file
+- 3 data storage text file \n
 First timer quick start:
   1. Load up all files and run main
   2. For fresh experience, empty .txt text files
