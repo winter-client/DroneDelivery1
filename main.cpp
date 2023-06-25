@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+
 #include "Drone.h"
 #include "Package.h"
 #include "AutoDeliver.h"
@@ -10,11 +11,33 @@ int main() {
     AutoDeliver autoDeliver;
     string droneDataFilePath, packageDataFilePath;
 
-    // Input the file paths for drone and package data
-    cout << "Enter the drone data file path: ";
-    cin >> droneDataFilePath;
-    cout << "Enter the package data file path: ";
-    cin >> packageDataFilePath;
+    while (true) {
+        // Input the file paths for drone and package data
+        std::cout << "Enter the drone data file path: ";
+        std::cin >> droneDataFilePath;
+
+        // Check if the drone data file path is valid
+        if (autoDeliver.isValidFilePath(droneDataFilePath)) {
+            break;  // Valid path, exit the loop
+        }
+        else {
+            std::cerr << "Invalid drone data file path. Please try again." << std::endl;
+        }
+    }
+
+    while (true) {
+        // Input the file paths for package data
+        std::cout << "Enter the package data file path: ";
+        std::cin >> packageDataFilePath;
+
+        // Check if the package data file path is valid
+        if (autoDeliver.isValidFilePath(packageDataFilePath)) {
+            break;  // Valid path, exit the loop
+        }
+        else {
+            std::cerr << "Invalid package data file path. Please try again." << std::endl;
+        }
+    }
 
     // Load drone and package data
     autoDeliver.loadDroneData(droneDataFilePath);

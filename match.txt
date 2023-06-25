@@ -1,3 +1,0 @@
-Matching Plan:
-D1,StopA,0700,P1
-D3,StopC,1000,P3

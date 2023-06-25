@@ -2,6 +2,11 @@
 #include "Package.h"
 #include "Drone.h"
 
+bool AutoDeliver::isValidFilePath(const std::string& filePath) {
+    std::ifstream file(filePath);
+    return file.good();
+}
+
 void AutoDeliver::loadDroneData(const std::string& droneDataFilePath) {
     std::ifstream file(droneDataFilePath);
     if (file.is_open()) {

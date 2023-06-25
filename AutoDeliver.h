@@ -1,14 +1,15 @@
 #ifndef AUTODELIVER_H
 #define AUTODELIVER_H
 
-#include "Drone.h"
-#include "Package.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
 #include <string>
 #include <algorithm>
+
+#include "Drone.h"
+#include "Package.h"
 
 class Drone;
 class Package;
@@ -19,6 +20,7 @@ private:
     std::vector<Package> packages;
 
 public:
+    bool isValidFilePath(const std::string& filePath);
     void loadDroneData(const std::string& droneDataFilePath);
     void loadPackageData(const std::string& packageDataFilePath);
     void generateMatchingPlan();
