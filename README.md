@@ -1,16 +1,17 @@
 Autonomous Delivery Application
 App files:
-- 1 main file
-- 3 header class files
-- 3 cpp implementation files
-- 3 data storage text file \n
+1 main file
+3 header class files
+3 cpp implementation files
+3 data storage text file 
+
 First timer quick start:
-  1. Load up all files and run main
-  2. For fresh experience, empty .txt text files
-  3. Any path errors will mean .txt file does not exist
+1. Load up all files and run main
+2. For fresh experience, empty .txt text files
+3. Any path errors will mean .txt file does not exist
 
 
-
+===============================================================================
 Project requirements
 
 1. The autonomous delivery drones would all standby at the package hub. There are 
