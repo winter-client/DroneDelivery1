@@ -11,7 +11,7 @@ First timer quick start:
 3. Any path errors will mean .txt file does not exist
 
 
-===========================================================================
+=============================================================================
 Project requirements
 
 1. The autonomous delivery drones would all standby at the package hub. There are 
